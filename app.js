@@ -6,6 +6,7 @@ const Men = require('./models/men');
 const Menfights = require('./models/menfights');
 const Fights = require('./models/fights');
 
+const arkaRoutes = require('./routes/arka');
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+
+app.use(arkaRoutes);
 
 app.get('/', (req, res, next) => {
     res.status(200).send(`
