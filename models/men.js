@@ -52,6 +52,8 @@ const Men = sequelize.define('men', {
         type: Sequelize.INTEGER(11),
         default: 0
     }
+}, {
+    timestamps: false
 });
 
 module.exports = Men;

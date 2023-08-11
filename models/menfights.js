@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
 const Menfights = sequelize.define('menfights', {
-    MantID: {
+    ManID: {
         type: Sequelize.INTEGER(11),
         allowNull: false,
         primaryKey: true
@@ -12,6 +12,8 @@ const Menfights = sequelize.define('menfights', {
         allowNull: false,
         primaryKey: true
     }
+}, {
+    timestamps: false
 });
 
 module.exports = Menfights;

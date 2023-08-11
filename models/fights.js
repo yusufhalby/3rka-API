@@ -37,6 +37,8 @@ const Fights = sequelize.define('fights', {
         type: Sequelize.STRING(255),
         allowNull: false
     }
+}, {
+    timestamps: false
 });
 
 module.exports = Fights;
