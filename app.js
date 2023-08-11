@@ -1,6 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const sequelize = require('./util/database');
+const Men = require('./models/men');
+const Menfights = require('./models/menfights');
+const Fights = require('./models/fights');
+
 
 const app = express();
 
@@ -37,4 +42,20 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection:', reason);
 });
 
-app.listen(PORT);
+Menfights.belongsTo(Men, {
+    foreignKey: 'ManID'
+});
+Menfights.belongsTo(Fights, {
+    foreignKey: 'FightID'
+});
+
+try {
+    sequelize.sync({
+        force: false
+    });
+    console.log('Connection has been established successfully.');
+    app.listen(PORT);
+    console.log('Server is on port: ', PORT);
+} catch (error) {
+    console.error('Something went wrong with database:', error);
+}
