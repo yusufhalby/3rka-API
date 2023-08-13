@@ -14,11 +14,10 @@ exports.createMan = async (req, res, next) => {
             throw error;
         }
         const pfp = req.file.path.replace('\\', '/');
-        const man = {Phone, uname, name, password: hashedPass, email, crecord, address, fav_weapon, pfp}
-        const createdMan = await Men.create(man);
+        const man = await Men.create({Phone, uname, name, password: hashedPass, email, crecord, address, fav_weapon, pfp});
         res.status(201).json({
             message: 'Man Created successfully',
-            man: createdMan
+            man
         });
     } catch (err) {
         if (!err.statusCode) {
