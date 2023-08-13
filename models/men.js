@@ -46,7 +46,7 @@ const Men = sequelize.define('men', {
     },
     isConfirmed: {
         type: Sequelize.TINYINT(1),
-        default: null
+        default: 0
     },
     price: {
         type: Sequelize.INTEGER(11),
