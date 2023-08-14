@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const mysql = require('mysql2/promise');
 
 const sequelize = require('./util/database');
 const Men = require('./models/men');
@@ -20,7 +21,9 @@ const PORT = process.env.PORT || 3000;
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         const path = 'Uploads';
-        if (!fs.existsSync(path)) fs.mkdir(path, err => {console.log(err)});
+        if (!fs.existsSync(path)) fs.mkdir(path, err => {
+            console.log(err)
+        });
         cb(null, path);
     },
     filename: (req, file, cb) => {
@@ -35,15 +38,18 @@ const fileFilter = (req, file, cb) => {
         case 'image/jpg':
         case 'image/jpeg':
         case 'image/webp':
-            cb(null, true);     //accept the file
+            cb(null, true); //accept the file
             break;
         default:
-            cb(null, false);    //reject the file
+            cb(null, false); //reject the file
     }
-};  
+};
 
 app.use(bodyParser.json());
-app.use(multer({storage: fileStorage, fileFilter}).single('usr_img'));
+app.use(multer({
+    storage: fileStorage,
+    fileFilter
+}).single('usr_img'));
 app.use('/Uploads', express.static(path.join(__dirname, 'Uploads')));
 
 app.use((req, res, next) => {
@@ -86,12 +92,20 @@ Menfights.belongsTo(Fights, {
 
 
 try {
-    sequelize.sync({
-        force: false
-    });
-    console.log('Connection has been established successfully.');
-    app.listen(PORT);
-    console.log('Server is on port: ', PORT);
+    mysql.createConnection({
+            user: process.env.DB_USER,
+            password: process.env.DB_PASS
+        })
+        .then((connection) => {
+            return connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_SCHEMA};`);
+        }).then(result => {
+            sequelize.sync({
+                force: false
+            });
+            console.log('Connection has been established successfully.');
+            app.listen(PORT);
+            console.log('Server is on port: ', PORT);
+        });
 } catch (error) {
     console.error('Something went wrong with database:', error);
 }
