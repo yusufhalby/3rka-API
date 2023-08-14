@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-const md5 = require('md5');
 
 const sequelize = require('./util/database');
 const Men = require('./models/men');
@@ -85,7 +84,6 @@ Menfights.belongsTo(Fights, {
     foreignKey: 'FightID'
 });
 
-console.log(md5('harmoush123'));
 
 try {
     sequelize.sync({
