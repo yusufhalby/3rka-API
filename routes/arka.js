@@ -7,6 +7,7 @@ const fightsController = require('../controllers/fights');
 router.get('/men', menController.getConfirmedMen);
 router.post('/men', menController.createMan);
 
+router.get('/fights/:ManID', fightsController.getConfirmedFights); //ManID will be passed within token later
 router.post('/fights', fightsController.orderFight);
 
 module.exports = router;
