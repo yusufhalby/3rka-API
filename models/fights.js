@@ -30,7 +30,6 @@ const Fights = sequelize.define('fights', {
     },
     isConfirmed: {
         type: Sequelize.TINYINT(1),
-        allowNull: false,
         default: 0
     },
     email: {
