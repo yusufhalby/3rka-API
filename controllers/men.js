@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const { Op } = require('sequelize');
+const jwt = require('jsonwebtoken');
 
 const Men = require('../models/men');
 const md5 = require('md5');
@@ -135,6 +137,50 @@ exports.deleteMan = async (req, res, next) => {
     }
 };
 
+exports.login = async (req, res, next) => {
+    const {uname, password} = req.body;
+    try {
+        const man = await Men.findOne({
+            where: {isConfirmed: 1,
+                [Op.or]: [{email: uname},{uname}]},
+            attributes: [
+            'pfp',
+            'name',
+            'uname',
+            'password',
+            'ManID'
+        ],
+        raw: true,
+    });
+        if (!man) {
+            const error = new Error('Incorrect username or email or user not confirmed yet.');
+            error.statusCode = 401;
+            throw error;
+        }
+        if (md5(password) !== man.password ){
+            const error = new Error('Incorrect password.');
+            error.statusCode = 401;
+            throw error;
+        }
+        delete man.password;
+        const token = jwt.sign({
+            id: man.ManID,
+        }, 
+        process.env.JWT_SECRET,
+        {expiresIn: '5m'},
+        );
+        res.status(200).json({
+            message: 'man fetched successfully',
+            token,
+            man
+        });
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
 
 
 //helper function

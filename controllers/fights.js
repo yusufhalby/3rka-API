@@ -44,7 +44,7 @@ exports.orderFight = async (req, res, next) => {
 };
 
 exports.getConfirmedFights = async (req, res, next) => {
-    const ManID = req.params.ManID;
+    const {ManID} = req;
     try {
         const fights = await Menfights.findAll({
             include: {
@@ -106,6 +106,7 @@ exports.getConfirmedFights = async (req, res, next) => {
         });
         res.status(200).json({
             message: 'Fights fetched successfully',
+            fightCount: fightsIds.length,
             fights
         });
     } catch (err) {
