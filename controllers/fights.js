@@ -44,8 +44,13 @@ exports.orderFight = async (req, res, next) => {
 };
 
 exports.getConfirmedFights = async (req, res, next) => {
-    const {ManID} = req;
+    const {ManID, role} = req;
     try {
+        if(!ManID || role !== 'user'){
+            const error = new Error('Login as user please.');
+            error.statusCode = 401;
+            throw error;
+        }
         const fights = await Menfights.findAll({
             include: {
                 model: Fights,

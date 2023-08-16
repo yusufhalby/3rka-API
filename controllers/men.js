@@ -165,6 +165,7 @@ exports.login = async (req, res, next) => {
         delete man.password;
         const token = jwt.sign({
             id: man.ManID,
+            role: 'user',
         }, 
         process.env.JWT_SECRET,
         {expiresIn: '5m'},
