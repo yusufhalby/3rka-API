@@ -121,6 +121,7 @@ exports.deleteMan = async (req, res, next) => {
             throw error;
         }
         pfp = man.pfp
+        // await Menfights.destroy({where: {ManID}}); //only needed if we want to delete a confirmed man
         await man.destroy();
         clearImage(pfp);
         res.status(200).json({
