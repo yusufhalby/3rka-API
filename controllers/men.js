@@ -19,7 +19,7 @@ exports.createMan = async (req, res, next) => {
         const man = await Men.create({Phone, uname, name, password: hashedPass, email, crecord, address, fav_weapon, pfp});
         res.status(201).json({
             message: 'Man Created successfully',
-            man
+            id: man.ManID
         });
     } catch (err) {
         if (!err.statusCode) {
