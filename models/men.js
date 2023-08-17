@@ -34,7 +34,7 @@ const Men = sequelize.define('men', {
     },
     pfp: {
         type: Sequelize.STRING(255),
-        default: null
+        defaultValue: null
     },
     address: {
         type: Sequelize.STRING(255),
@@ -46,11 +46,11 @@ const Men = sequelize.define('men', {
     },
     isConfirmed: {
         type: Sequelize.TINYINT(1),
-        default: 0
+        defaultValue: 0
     },
     price: {
         type: Sequelize.INTEGER(11),
-        default: 0
+        defaultValue: 0
     }
 }, {
     timestamps: false
