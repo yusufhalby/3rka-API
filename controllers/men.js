@@ -2,14 +2,22 @@ const fs = require('fs');
 const path = require('path');
 const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 
 const Men = require('../models/men');
 const md5 = require('md5');
 
 exports.createMan = async (req, res, next) => {
+    const errors = validationResult(req);
     const {Phone, uname, name, password, email, crecord, address, fav_weapon} = req.body; //ManID => auto, pfp => file, 
     const hashedPass = md5(password);
     try {
+        if(!errors.isEmpty()){
+            const error =  new Error('Validation failed.');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
         if(!req.file){
             const error = new Error('No image provided.');
             error.statusCode = 422;
@@ -88,8 +96,15 @@ exports.geUnconfirmedtMen = async (req, res, next) =>{
 };
 
 exports.acceptMan = async (req, res, next) => {
+    const errors = validationResult(req);
     const {price, ManID} = req.body; 
     try {
+        if(!errors.isEmpty()){
+            const error =  new Error('Validation failed.');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
         const man = await Men.findByPk(ManID);
         if(!man){
             const error = new Error('No man found.');
@@ -138,8 +153,15 @@ exports.deleteMan = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
+    const errors = validationResult(req);
     const {uname, password} = req.body;
     try {
+        if(!errors.isEmpty()){
+            const error =  new Error('Validation failed.');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
         const man = await Men.findOne({
             where: {isConfirmed: 1,
                 [Op.or]: [{email: uname},{uname}]},
@@ -168,7 +190,7 @@ exports.login = async (req, res, next) => {
             role: 'user',
         }, 
         process.env.JWT_SECRET,
-        {expiresIn: '5m'},
+        {expiresIn: process.env.JWT_DURATION},
         );
         res.status(200).json({
             message: 'man fetched successfully',

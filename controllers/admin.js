@@ -12,7 +12,7 @@ exports.login = async (req, res, next) => {
             role: 'admin',
         }, 
         process.env.JWT_SECRET,
-        {expiresIn: '5m'},
+        {expiresIn: process.env.JWT_DURATION},
         );
         res.status(200).json({
             message: 'Welcome to admin dashboard',

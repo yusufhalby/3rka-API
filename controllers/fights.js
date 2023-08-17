@@ -4,8 +4,10 @@ const { Op } = require('sequelize');
 const Fights = require('../models/fights');
 const Menfights = require('../models/menfights');
 const Men = require('../models/men');
+const { validationResult } = require('express-validator');
 
 exports.orderFight = async (req, res, next) => {
+    const errors = validationResult(req);
     const {
         ClientName,
         FightAddress,
@@ -16,6 +18,12 @@ exports.orderFight = async (req, res, next) => {
         selectedIDs
     } = req.body
     try {
+        if(!errors.isEmpty()){
+            const error =  new Error('Validation failed.');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
         const fight = await Fights.create({
             ClientName,
             FightAddress,
