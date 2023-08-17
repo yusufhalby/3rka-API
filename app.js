@@ -17,6 +17,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+app.use(bodyParser.json());
 // Configure multer for handling file uploads
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -27,7 +28,7 @@ const fileStorage = multer.diskStorage({
         cb(null, path);
     },
     filename: (req, file, cb) => {
-        cb(null, new Date().toISOString().replace(/:/g, '.') + '-' + file.originalname);
+        cb(null, req.body.uname + '_' + Date.now() + '.' + file.mimetype.split("/")[1]);
     }
 });
 
@@ -45,7 +46,6 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-app.use(bodyParser.json());
 app.use(multer({
     storage: fileStorage,
     fileFilter
