@@ -73,6 +73,7 @@ app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
     const message = error.message;
     const data = error.data;
+    if (req.file) {fs.unlink(path.join(__dirname, req.file.path), err => console.log(err)); console.log(req.file.path);}
     res.status(status).json({
         message: message,
         data
