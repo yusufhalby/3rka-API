@@ -97,7 +97,8 @@ Menfights.belongsTo(Fights, {
 try {
     mysql.createConnection({
             user: process.env.DB_USER,
-            password: process.env.DB_PASS
+            password: process.env.DB_PASS,
+            host: process.env.DB_HOST, 
         })
         .then((connection) => {
             return connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_SCHEMA};`);
