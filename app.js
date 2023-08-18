@@ -4,6 +4,7 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
+const helmet = require('helmet');
 
 const sequelize = require('./util/database');
 const Men = require('./models/men');
@@ -14,6 +15,7 @@ const arkaRoutes = require('./routes/arka');
 const adminRoutes = require('./routes/admin');
 
 const app = express();
+app.use(helmet());
 
 const PORT = process.env.PORT || 3000;
 
